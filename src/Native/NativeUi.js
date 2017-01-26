@@ -286,7 +286,7 @@ var _ohanhi$elm_native_ui$Native_NativeUi = (function () {
    * component that will begin rendering the virtual tree as soon as the Elm
    * program starts running
    */
-  function makeComponent(impl) {
+  function makeComponent(impl, portsReceiver) {
     return React.createClass({
       getInitialState: function getInitialState() {
         return {};
@@ -301,6 +301,8 @@ var _ohanhi$elm_native_ui$Native_NativeUi = (function () {
           impl.subscriptions,
           this.renderer
         );
+
+        portsReceiver(this._app.ports);
       },
 
       renderer: function renderer(onMessage, initialModel) {
@@ -335,8 +337,8 @@ var _ohanhi$elm_native_ui$Native_NativeUi = (function () {
   function program(impl) {
     return function(flagDecoder) {
       return function(object, moduleName, debugMetadata) {
-        object.start = function start() {
-          return makeComponent(impl);
+        object.start = function start(portsReceiver) {
+          return makeComponent(impl, portsReceiver);
         };
       };
     };
